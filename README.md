@@ -1,0 +1,2 @@
+generator-webapp-kashiro
+========================
