@@ -32,13 +32,21 @@ AppGenerator.prototype.askFor = function askFor() {
       value: 'includeCompass',
       checked: true
     }, {
+      name: 'Jade',
+      value: 'includeJade',
+      checked: true
+    }, {
+      name: 'node-easymock',
+      value: 'includeNodeEasyMock',
+      checked: false
+    }, {
       name: 'Bootstrap',
       value: 'includeBootstrap',
-      checked: true
+      checked: false
     }, {
       name: 'Modernizr',
       value: 'includeModernizr',
-      checked: true
+      checked: false
     }]
   }];
 
@@ -49,9 +57,11 @@ AppGenerator.prototype.askFor = function askFor() {
 
     // manually deal with the response, get back and store the results.
     // we change a bit this way of doing to automatically do this in the self.prompt() method.
-    this.includeCompass = hasFeature('includeCompass');
-    this.includeBootstrap = hasFeature('includeBootstrap');
-    this.includeModernizr = hasFeature('includeModernizr');
+    this.includeCompass      = hasFeature('includeCompass');
+    this.includeJade         = hasFeature('includeJade');
+    this.includeNodeEasyMock = hasFeature('includeNodeEasyMock');
+    this.includeBootstrap    = hasFeature('includeBootstrap');
+    this.includeModernizr    = hasFeature('includeModernizr');
 
     cb();
   }.bind(this));
@@ -134,10 +144,16 @@ AppGenerator.prototype.app = function app() {
   this.mkdir('app/scripts');
   this.mkdir('app/styles');
   this.mkdir('app/images');
-  this.mkdir('mock');
-  this.mkdir('mock/api');
   this.write('app/index.html', this.indexFile);
   this.write('app/scripts/main.js', 'console.log(\'\\\'Allo \\\'Allo!\');');
+
+  if(this.includeNodeEasyMock){
+    this.mkdir('mock');
+    this.mkdir('mock/api');
+  }
+  if(this.includeJade){
+    this.mkdir('app/jade');
+  }
 };
 
 AppGenerator.prototype.install = function () {
