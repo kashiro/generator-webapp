@@ -7,7 +7,9 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 //
+<% if (includeNodeEasyMock) { %>
 var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+<% } %>
 var mountFolder = function (connect, dir) {
     return connect.static(require('path').resolve(dir));
 };
@@ -31,7 +33,12 @@ module.exports = function (grunt) {
         yeoman: {
             // Configurable paths
             app: 'app',
-            dist: 'dist'
+            dist: 'dist',
+            domain: {
+                prod : '',
+                test : '',
+                local: ''
+            }
         },
 
         // Watches files for changes and runs tasks based on the changed files
@@ -46,7 +53,14 @@ module.exports = function (grunt) {
             jstest: {
                 files: testScripts,
                 tasks: ['test:watch']
-            },
+            },<% if (includeJade) { %>
+            jade: {
+                files: ['<%%= yeoman.app %>/jade/**/*.jade'],
+                tasks: ['newer:jade'],
+                options: {
+                    livereload: true
+                }
+            },<% } %>
             gruntfile: {
                 files: ['Gruntfile.js']
             },<% if (includeCompass) { %>
@@ -63,12 +77,46 @@ module.exports = function (grunt) {
                     livereload: '<%%= connect.options.livereload %>'
                 },
                 files: [
-                    '<%%= yeoman.app %>/**/*.html',
                     '.tmp/styles/{,*/}*.css',
                     '<%%= yeoman.app %>/images/**/*'
                 ]
             }
         },
+
+<% if (includeJade) { %>
+        jade: {
+            options: {
+                pretty: true,
+                data: {
+                    imgPath: 'images',
+                    httpDomain: '<%%= yeoman.domain.local %>'
+                },
+                basedir: '<%%= yeoman.app %>/jade'
+            },
+            server: {
+                files: [{
+                    expand: true,
+                    cwd: '<%%= yeoman.app %>/jade',
+                    src: '**/!(_)*.jade',
+                    dest: '.tmp',
+                    ext: '.html'
+                }]
+            },
+            dist: {
+                options: {
+                    data: {
+                        httpDomain: '<%%= yeoman.domain.prod %>'
+                    }
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%%= yeoman.app %>/jade',
+                    src: '**/!(_)*.jade',
+                    dest: '.tmp',
+                    ext: '.html'
+                }]
+            }
+        },<% } %>
 
         // The actual grunt server settings
         connect: {
@@ -94,7 +142,8 @@ module.exports = function (grunt) {
                     ],
                     middleware: function (connect) {
                         return [
-                            proxySnippet,
+                            <% if (includeNodeEasyMock) { %>
+                            proxySnippet,<% } %>
                             mountFolder(connect, '.tmp'),
                             mountFolder(connect, 'app')
                         ];
@@ -158,7 +207,7 @@ module.exports = function (grunt) {
                 javascriptsDir: '<%%= yeoman.app %>/scripts',
                 fontsDir: '<%%= yeoman.app %>/styles/fonts',
                 importPath: '<%%= yeoman.app %>/bower_components',
-                httpImagesPath: '/images',
+                httpImagesPath: 'images',
                 httpGeneratedImagesPath: '/images/generated',
                 httpFontsPath: '/styles/fonts',
                 relativeAssets: false,
@@ -166,7 +215,9 @@ module.exports = function (grunt) {
             },
             dist: {
                 options: {
-                    generatedImagesDir: '<%%= yeoman.dist %>/images/generated'
+                    generatedImagesDir     : '<%%= yeoman.dist %>/images/generated',
+                    httpImagesPath         : '<%%= yeoman.domain.prod %>/images',
+                    httpGeneratedImagesPath: '<%%= yeoman.domain.prod %>/images/generated'
                 }
             },
             server: {
@@ -194,8 +245,8 @@ module.exports = function (grunt) {
         // Automatically inject Bower components into the HTML file
         'bower-install': {
             app: {
-                html: '<%%= yeoman.app %>/index.html',
-                ignorePath: '<%%= yeoman.app %>/',
+                html: '.tmp/index.html',
+                ignorePath: '.tmp',
                 exclude: [<% if (includeCompass) { %> '<%%= yeoman.app %>/bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap.js' <% } %>]
             }
         },
@@ -207,7 +258,7 @@ module.exports = function (grunt) {
             options: {
                 dest: '<%%= yeoman.dist %>'
             },
-            html: '<%%= yeoman.app %>/index.html'
+            html: '.tmp/index.html'
         },
 
         // Performs rewrites based on rev and the useminPrepare configuration
@@ -215,7 +266,7 @@ module.exports = function (grunt) {
             options: {
                 assetsDirs: ['<%%= yeoman.dist %>']
             },
-            html: ['<%%= yeoman.dist %>/*/*.html'],
+            html: ['<%%= yeoman.dist %>/**/*.html'],
             css: ['<%%= yeoman.dist %>/styles/{,*/}*.css']
         },
 
@@ -299,8 +350,7 @@ module.exports = function (grunt) {
                         '*.{ico,png,txt}',
                         '.htaccess',
                         'images/**/*.webp',
-                        '**/*.html',
-                        'styles/fonts/{,*/}*.*'<% if (includeBootstrap) { %>,<% if (includeCompass) { %>
+                        'styles/fonts/{,*/}*.*',<% if (includeBootstrap) { %>,<% if (includeCompass) { %>
                         'bower_components/bootstrap-sass/vendor/assets/fonts/bootstrap/*.*'<% } else { %>
                         'bower_components/bootstrap/dist/fonts/*.*'<% } %><% } %>
                     ]
@@ -323,12 +373,12 @@ module.exports = function (grunt) {
                     singleRun: true,
                     browsers: ['PhantomJS'],
                     files: [
-                        '<%= yeoman.app %>/bower_components/query/jquery.min.js',
-                        '<%= yeoman.app %>/bower_components/underscore/underscore-min.js'
+                        '<%%= yeoman.app %>/bower_components/query/jquery.min.js',
+                        '<%%= yeoman.app %>/bower_components/underscore/underscore-min.js'
                     ].concat(scripts.concat(testScripts)),
                     exclude: [
-                        '<%= yeoman.app %>/scripts/main.js'
-                    ],
+                        '<%%= yeoman.app %>/scripts/main.js'
+                    ]
                 }
             }
         },
@@ -350,13 +400,14 @@ module.exports = function (grunt) {
         // Run some tasks in parallel to speed up build process
         concurrent: {
             server: [<% if (includeCompass) { %>
-                'compass:server',
+                'compass:server',<% } %><% if (includeJade) { %>
+                'jade:server',<% } %>
                 'copy:styles'
             ],
             test: [
                 'copy:styles'
             ],
-            dist: [<% } if (includeCompass) { %>
+            dist: [<% if (includeCompass) { %>
                 'compass',<% } %>
                 'copy:styles',
                 'imagemin',
@@ -388,17 +439,17 @@ module.exports = function (grunt) {
     grunt.registerTask('test', ['newer:jshint', 'karma']);
 
     grunt.registerTask('build', [
-        'clean:dist',
+        'clean:dist',<% if (includeJade) { %>
+        'jade:dist',<% } %>
         'useminPrepare',
         'concurrent:dist',
         'autoprefixer',
-        'concat',
-        'cssmin',
-        'uglify',
+        //'concat',
+        //'cssmin',
+        //'uglify',
         'copy:dist',<% if (includeModernizr) { %>
         'modernizr',<% } %>
-        'usemin',
-        'htmlmin'
+        'usemin'
     ]);
 
     grunt.registerTask('default', [

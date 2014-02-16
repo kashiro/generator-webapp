@@ -99,6 +99,7 @@ AppGenerator.prototype.h5bp = function h5bp() {
   this.copy('robots.txt', 'app/robots.txt');
   this.copy('htaccess', 'app/.htaccess');
   this.copy('scripts.json', 'scripts.json');
+  this.copy('README.md', 'README.md');
 };
 
 AppGenerator.prototype.mainStylesheet = function mainStylesheet() {
@@ -153,6 +154,9 @@ AppGenerator.prototype.app = function app() {
   }
   if(this.includeJade){
     this.mkdir('app/jade');
+    this.copy('index.jade', 'app/jade/index.jade');
+  }else{
+    this.write('app/index.html', this.indexFile);
   }
 };
 
