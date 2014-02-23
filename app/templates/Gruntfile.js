@@ -45,38 +45,28 @@ module.exports = function (grunt) {
         watch: {
             js: {
                 files: scripts,
-                tasks: ['jshint'],
+                tasks: ['newer:jshint'],
                 options: {
                     livereload: true
                 }
-            },
-            jstest: {
-                files: testScripts,
-                tasks: ['test:watch']
             },<% if (includeJade) { %>
             jade: {
                 files: ['<%%= yeoman.app %>/jade/**/*.jade'],
-                tasks: ['newer:jade'],
+                tasks: ['newer:jade:server'],
                 options: {
                     livereload: true
                 }
-            },<% } %>
-            gruntfile: {
-                files: ['Gruntfile.js']
-            },<% if (includeCompass) { %>
+            },<% } %><% if (includeCompass) { %>
             compass: {
                 files: ['<%%= yeoman.app %>/styles/**/*.{scss,sass}'],
                 tasks: ['compass:server', 'autoprefixer']
             },<% } %>
-            styles: {
-                files: ['<%%= yeoman.app %>/styles/**/*.css'],
-                tasks: ['newer:copy:styles', 'autoprefixer']
-            },
             livereload: {
                 options: {
                     livereload: '<%%= connect.options.livereload %>'
                 },
                 files: [
+                    '.tmp/**/*.html',
                     '.tmp/styles/{,*/}*.css',
                     '<%%= yeoman.app %>/images/**/*'
                 ]
@@ -112,7 +102,7 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: '<%%= yeoman.app %>/jade',
                     src: '**/!(_)*.jade',
-                    dest: '.tmp',
+                    dest: '<%%= yeoman.dist %>',
                     ext: '.html'
                 }]
             }
@@ -149,17 +139,7 @@ module.exports = function (grunt) {
                         ];
                     }
                 }
-            },
-            test: {
-                options: {
-                    port: 9001,
-                    base: [
-                        '.tmp',
-                        'test',
-                        '<%%= yeoman.app %>'
-                    ]
-                }
-            },
+            }
             dist: {
                 options: {
                     open: true,
@@ -258,7 +238,7 @@ module.exports = function (grunt) {
             options: {
                 dest: '<%%= yeoman.dist %>'
             },
-            html: '.tmp/index.html'
+            html: '<%%= yeoman.dist %>/index.html'
         },
 
         // Performs rewrites based on rev and the useminPrepare configuration
@@ -311,32 +291,6 @@ module.exports = function (grunt) {
                 }]
             }
         },
-
-        // By default, your `index.html`'s <!-- Usemin block --> will take care of
-        // minification. These next options are pre-configured if you do not wish
-        // to use the Usemin blocks.
-        // cssmin: {
-        //     dist: {
-        //         files: {
-        //             '<%%= yeoman.dist %>/styles/main.css': [
-        //                 '.tmp/styles/{,*/}*.css',
-        //                 '<%%= yeoman.app %>/styles/{,*/}*.css'
-        //             ]
-        //         }
-        //     }
-        // },
-        // uglify: {
-        //     dist: {
-        //         files: {
-        //             '<%%= yeoman.dist %>/scripts/scripts.js': [
-        //                 '<%%= yeoman.dist %>/scripts/scripts.js'
-        //             ]
-        //         }
-        //     }
-        // },
-        // concat: {
-        //     dist: {}
-        // },
 
         // Copies remaining files to places other tasks can use
         copy: {
@@ -408,8 +362,9 @@ module.exports = function (grunt) {
                 'copy:styles'
             ],
             dist: [<% if (includeCompass) { %>
-                'compass',<% } %>
-                'copy:styles',
+                'compass:dist',<% } %>
+                'copy:styles',<% if (includeJade) { %>
+                'jade:dist',<% } %>
                 'imagemin',
                 'svgmin'
             ]
@@ -439,14 +394,13 @@ module.exports = function (grunt) {
     grunt.registerTask('test', ['newer:jshint', 'karma']);
 
     grunt.registerTask('build', [
-        'clean:dist',<% if (includeJade) { %>
-        'jade:dist',<% } %>
-        'useminPrepare',
+        'clean:dist',
         'concurrent:dist',
         'autoprefixer',
-        //'concat',
-        //'cssmin',
-        //'uglify',
+        'useminPrepare',
+        'concat',
+        'cssmin',
+        'uglify',
         'copy:dist',<% if (includeModernizr) { %>
         'modernizr',<% } %>
         'usemin'
