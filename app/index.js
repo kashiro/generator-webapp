@@ -69,6 +69,36 @@ AppGenerator.prototype.askFor = function askFor() {
 
 AppGenerator.prototype.gruntfile = function gruntfile() {
   this.template('Gruntfile.js');
+
+  // app settings
+  this.mkdir('settings');
+  this.copy('settings/app.json', 'settings/app.json');
+  this.copy('settings/network.json', 'settings/network.json');
+  this.copy('settings/scripts.json', 'settings/scripts.json');
+
+  // grunt tasks
+  this.mkdir('grunt');
+  this.copy('grunt/autoprefixer.js', 'grunt/autoprefixer.js');
+  this.copy('grunt/bower-install.js', 'grunt/bower-install.js');
+  this.copy('grunt/clean.js', 'grunt/clean.js');
+  this.copy('grunt/concurrent.js', 'grunt/concurrent.js');
+  this.copy('grunt/connect.js', 'grunt/connect.js');
+  this.copy('grunt/copy.js', 'grunt/copy.js');
+  this.copy('grunt/htmlmin.js', 'grunt/htmlmin.js');
+  this.copy('grunt/imagemin.js', 'grunt/imagemin.js');
+  this.copy('grunt/jshint.js', 'grunt/jshint.js');
+  this.copy('grunt/karma.js', 'grunt/karma.js');
+  this.copy('grunt/svgmin.js', 'grunt/svgmin.js');
+  this.copy('grunt/usemin.js', 'grunt/usemin.js');
+  this.copy('grunt/useminPrepare.js', 'grunt/useminPrepare.js');
+  this.copy('grunt/watch.js', 'grunt/watch.js');
+
+  if(this.includeJade){
+    this.copy('grunt/jade.js', 'grunt/jade.js');
+  }
+  if(this.includeCompass){
+    this.copy('grunt/compass.js', 'grunt/compass.js');
+  }
 };
 
 AppGenerator.prototype.packageJSON = function packageJSON() {
@@ -148,6 +178,7 @@ AppGenerator.prototype.app = function app() {
   this.write('app/index.html', this.indexFile);
   this.write('app/scripts/main.js', 'console.log(\'\\\'Allo \\\'Allo!\');');
 
+  // app files or directories
   if(this.includeNodeEasyMock){
     this.mkdir('mock');
     this.mkdir('mock/api');
