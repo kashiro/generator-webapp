@@ -7,7 +7,8 @@ module.exports = {
         pretty: true,
         data: {
             httpDomain: networkSettings.domain.local,
-            scripts: scriptsSettings.app
+            scripts: scriptsSettings.app,
+            vendorScripts: scriptsSettings.vendor
         },
         basedir: appSettings.dir.app + '/jade'
     },
