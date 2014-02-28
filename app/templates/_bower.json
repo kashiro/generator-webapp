@@ -7,7 +7,8 @@
     "modernizr": "~2.6.2",<% } %>
     "jquery": "~1.10.2",
     "underscore": "*",
-    "GlobalJS": "kashiro/GlobalJS"
+    "GlobalJS": "kashiro/GlobalJS",
+    "html5shiv": "~3.7.0"
   },
   "devDependencies": {}
 }
