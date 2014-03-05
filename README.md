@@ -1,8 +1,36 @@
 # generator-webapp
 
+## Depandency
+
+Those modules are required in global.
+
+### node     : v0.10.25
+
+    sudo brew install node
+
+### yo       : latest
+
+    npm install -g yo
+
+### easymock(optional) : 0.2.5
+
+    npm install -g easymock
+
 ## Outline
 
 This generator is made based on [generator-webapp](https://github.com/yeoman/generator-webapp)
+
+## Usage
+
+### install
+
+    $ git clone https://github.com/kashiro/generator-webapp.git
+    $ cd generator-webapp
+    $ npm insatll -g .
+  
+### initialize
+
+    $ yo webapp ${appName}
 
 ## Additional function
 
