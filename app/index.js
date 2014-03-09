@@ -128,7 +128,6 @@ AppGenerator.prototype.h5bp = function h5bp() {
   this.copy('404.html', 'app/404.html');
   this.copy('robots.txt', 'app/robots.txt');
   this.copy('htaccess', 'app/.htaccess');
-  this.copy('scripts.json', 'scripts.json');
   this.copy('README.md', 'README.md');
 };
 
