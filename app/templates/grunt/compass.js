@@ -10,7 +10,7 @@ module.exports = {
         javascriptsDir: appSettings.dir.app + '/scripts',
         fontsDir: appSettings.dir.app + '/styles/fonts',
         importPath: appSettings.dir.app + '/bower_components',
-        httpImagesPath: 'images',
+        httpImagesPath: '/images',
         httpGeneratedImagesPath: '/images/generated',
         httpFontsPath: '/styles/fonts',
         relativeAssets: false,
@@ -21,6 +21,13 @@ module.exports = {
             generatedImagesDir     : appSettings.dir.dist + '/images/generated',
             httpImagesPath         : networkSettings.domain.prod + '/images',
             httpGeneratedImagesPath: networkSettings.domain.prod + '/images/generated'
+        }
+    },
+    stg: {
+        options: {
+            generatedImagesDir     : appSettings.dir.dist + '/images/generated',
+            httpImagesPath         : '/images',
+            httpGeneratedImagesPath: '/images/generated'
         }
     },
     server: {

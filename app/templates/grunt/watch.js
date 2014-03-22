@@ -16,7 +16,7 @@ module.exports = {
     },<% if (includeJade) { %>
     jade: {
         files: [ appSettings.dir.app + '/jade/**/*.jade'],
-        tasks: ['newer:jade:server']
+        tasks: ['jade:server']
     },<% } %><% if (includeCompass) { %>
     compass: {
         files: [ appSettings.dir.app + '/styles/**/*.{scss,sass}'],

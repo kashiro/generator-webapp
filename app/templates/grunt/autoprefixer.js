@@ -1,6 +1,7 @@
 module.exports = {
     options: {
-        browsers: ['last 1 version']
+        <% if (supportMobile) { %>browsers: ['last 2 version', 'android 2.3']<% }else{ %>
+        browsers: ['last 2 version', 'ie 8', 'ie 9']<% } %>
     },
     dist: {
         files: [{

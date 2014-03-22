@@ -11,19 +11,28 @@ Following functions will be added.
 - jade task
 - easymock task
 
-## Attention
+## Build
 
-Due to a bug correspondence of grunt-connect-proxy
-You should comment out following line of generated folders.
+### command
 
+for local
 
-file: `node_modules/grunt-connect-proxy/lib/utils.js`
+  grunt serve
 
-line:
+for stg
 
-```javascript
-utils.log.verbose.....
-```
+  comming soon
 
-* There are 3 line utils.log.verbose are used.
+for prod
 
+  comming soon
+
+## Settings
+
+### Script
+
+  settings/scripts.json
+
+### network
+
+  settings/network.json

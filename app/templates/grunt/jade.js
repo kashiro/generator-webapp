@@ -21,6 +21,22 @@ module.exports = {
             ext: '.html'
         }]
     },
+    stg: {
+        options: {
+            data: {
+                resourcePath: '',
+                domain: networkSettings.domain,
+                scripts: scriptsSettings
+            }
+        },
+        files: [{
+            expand: true,
+            cwd: appSettings.dir.app + '/jade',
+            src: '**/!(_)*.jade',
+            dest: appSettings.dir.dist,
+            ext: '.html'
+        }]
+    },
     dist: {
         options: {
             data: {

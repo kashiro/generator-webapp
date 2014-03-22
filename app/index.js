@@ -67,8 +67,32 @@ AppGenerator.prototype.askFor = function askFor() {
   }.bind(this));
 };
 
+AppGenerator.prototype.askForSupport = function askForSupport() {
+  var cb = this.async();
+
+  var prompts = [{
+    type: 'checkbox',
+    name: 'support',
+    message: 'Would you like support?',
+    choices: [{
+      name: 'mobile',
+      value: 'supportMobile',
+      checked: false
+    }]
+  }];
+
+  this.prompt(prompts, function (answers) {
+    var support = answers.support;
+
+    function hasSupport(supp) { return support.indexOf(supp) !== -1; }
+    this.supportMobile      = hasSupport('supportMobile');
+
+    cb();
+  }.bind(this));
+};
+
 AppGenerator.prototype.gruntfile = function gruntfile() {
-  this.template('Gruntfile.js');
+  this.template('_Gruntfile.js');
 
   // app settings
   this.mkdir('settings');
