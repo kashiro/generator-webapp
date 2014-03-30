@@ -92,7 +92,7 @@ AppGenerator.prototype.askForSupport = function askForSupport() {
 };
 
 AppGenerator.prototype.gruntfile = function gruntfile() {
-  this.template('_Gruntfile.js');
+  this.template('_Gruntfile.js', 'Gruntfile.js');
 
   // app settings
   this.mkdir('settings');
