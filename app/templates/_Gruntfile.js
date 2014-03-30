@@ -47,7 +47,7 @@ module.exports = function (grunt) {
         'concat',
         'cssmin',
         'uglify',
-        'copy:stg',
+        'copy:stg'
     ]);
 
     grunt.registerTask('build', [
