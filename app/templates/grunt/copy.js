@@ -28,7 +28,7 @@ module.exports = {
                 'scripts/**/*.js',
                 '*.{ico,png,txt}',
                 '.htaccess',
-                'images/**/*.webp',
+                'images/*',
                 'styles/fonts/{,*/}*.*',<% if (includeBootstrap) { %>,<% if (includeCompass) { %>
                 'bower_components/bootstrap-sass/vendor/assets/fonts/bootstrap/*.*'<% } else { %>
                 'bower_components/bootstrap/dist/fonts/*.*'<% } %><% } %>
