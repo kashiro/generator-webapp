@@ -25,8 +25,8 @@ module.exports = function (grunt) {
         grunt.task.run([
             'clean:server',
             'concurrent:server',
-            'autoprefixer',
-            'configureProxies',
+            'autoprefixer',<% if (includeNodeEasyMock) { %>
+            'configureProxies',<% } %>
             'connect:livereload',
             'watch'
         ]);
