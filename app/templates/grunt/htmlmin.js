@@ -7,7 +7,6 @@ module.exports = {
             removeAttributeQuotes: true,
             removeCommentsFromCDATA: true,
             removeEmptyAttributes: true,
-            removeOptionalTags: true,
             removeRedundantAttributes: true,
             useShortDoctype: true
         },
