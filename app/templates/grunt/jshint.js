@@ -1,5 +1,4 @@
-var appSettings = require('../settings/app.json'),
-    scriptsSettings = require('../settings/scripts.json');
+var appSettings = require('../settings/app.json');
 
 module.exports = {
     options: {
@@ -8,6 +7,7 @@ module.exports = {
     },
     all: [
         'Gruntfile.js',
-        '!' + appSettings.dir.app + '/scripts/vendor/*'
-    ].concat(scriptsSettings.app.concat(scriptsSettings.test))
+        appSettings.dir.app + '/scripts/{,*/}*.js',
+        'test/spec/{,*/}*.js'
+    ]
 };
